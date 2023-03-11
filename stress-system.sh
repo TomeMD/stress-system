@@ -36,5 +36,4 @@ OUTPUT_FILE="stress-ng_${CORES}_${LOAD_TYPE}.log"
 # Run CPU load using stress-ng and write results to output file
 m_echo "Stressing CPU cores $CORES_LIST with $LOAD% of load using $LOAD_TYPE stress tests during $TIMEOUT"
 taskset -c ${CORES_LIST} stress-ng --metrics --cpu ${CORES} --cpu-load ${LOAD} --cpu-method ${LOAD_TYPE} --timeout ${TIMEOUT} >> $OUTPUT_FILE 2>&1
-TIMESTAMP=$(date '+%Y-%m-%d_%H-%M-%S')
 m_echo "Stress tests finished successfully"
