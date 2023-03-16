@@ -27,14 +27,15 @@ function print_conf() {
     m_echo "Timeout = $TIMEOUT"
     m_echo "Load Type = $LOAD_TYPE"
     m_echo "Cores list = [$CORES_LIST]"
+    m_echo "Iterations = $ITERATIONS"
 }
 
 export -f print_conf
 
 function run_test() {
-    m_echo "Stressing $CORES_NUM CPU cores"
+    m_echo "Iteration $(expr $i + 1): Stressing $CORES_NUM CPU cores"
     taskset -c $CORES_LIST stress-ng --metrics --cpu $CORES_NUM --cpu-load $LOAD --cpu-method $LOAD_TYPE --timeout $TIMEOUT >> $LOG_FILE 2>&1
-    m_echo "Stress tests finished successfully"
+    m_echo "Iteration $(expr $i + 1): Stress tests finished successfully"
 }
 
 export -f run_test

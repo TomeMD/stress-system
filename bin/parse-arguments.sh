@@ -23,13 +23,6 @@ EOF
 exit 1
 }
 
-# Default values
-export ITERATIONS=1
-export LOAD=50
-export TIMEOUT=10s
-export LOAD_TYPE=all
-export CORES_LIST=$(seq -s ',' 0 $(($(nproc) - 1)))
-
 # Procesamiento de los argumentos utilizando getopts
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -52,6 +45,9 @@ while [[ $# -gt 0 ]]; do
     -c|--cores-list)
       CORES_LIST="$2"
       shift 2
+      ;;
+    -h|--help)
+      usage
       ;;
     *)
 	  echo "Unknown option: $1"
