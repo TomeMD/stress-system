@@ -14,5 +14,7 @@ Once `stress-ng` is installed run the tool with:
 ./run.sh
 ```
 
+You can specify the options from the CLI (see `./run.sh --help`) or by modifying the `./experiment/stress-conf.sh` configuration file.
+
 
 
