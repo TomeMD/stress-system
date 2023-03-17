@@ -6,7 +6,8 @@ Usage: $(basename "$0") [-i|--iterations <I>] [-l|--load <P>] [-t|--timeout <T>]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
-  -l, --load <P>          Stress CPU with P percent of CPU load (0%-100%) [Default: 50%]
+  -l, --load <P>          Stress CPU with P percent of CPU load. The load will be assigned to cores incrementally. [Default: 50%]
+                                Example: "run.sh -l 130 -c 3,6" will load core 3 at 100% and core 6 at 30%.
   -t, --timeout <T>       Stop tests after T seconds. Time units can be specified by using suffixes. [Default: 10s]
   				s = seconds
   				m = minutes

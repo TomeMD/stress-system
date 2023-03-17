@@ -17,9 +17,18 @@ export -f m_echo
 function m_err() {
     get_date
     echo -e "\e[48;5;1m[$DATE ERR ]\e[0m $@" >&2
+    echo "$DATE > $@" >> $LOG_FILE
 }
 
 export -f m_err
+
+function m_warn() {
+    get_date
+    echo -e "\e[48;5;208m[$DATE WARN]\e[0m $@"
+    echo "$DATE > $@" >> $LOG_FILE
+}
+
+export -f m_warn
 
 function print_conf() {
     m_echo "Writing output to $LOG_FILE"
@@ -33,7 +42,7 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
-    m_echo "Iteration $(($i + 1)): Stressing CPU core $1 with $2% of load"
+    m_echo "Iteration $3: Stressing CPU core $1 with $2% of load"
     stress-ng --metrics --taskset $1 --cpu 1 --cpu-load $2 --cpu-method $LOAD_TYPE --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
 }
 

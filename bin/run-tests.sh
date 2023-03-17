@@ -1,10 +1,20 @@
 #!/bin/bash
 
-LAST_LOAD=$LOAD
-export CORES_TO_LOAD=""
-export NUM_CORES=1
+USER_SPEC_CORES=$(echo ${CORES_LIST} | awk -F ',' '{print NF}')
+MAX_LOAD=$(($USER_SPEC_CORES * 100))
 
-while [[ $LAST_LOAD -ge 100 ]]; do
+if [[ $LOAD -ge $MAX_LOAD ]]; then
+  m_warn "Too high load specified for the available cores"
+  m_warn "Maximum load that can be executed with $USER_SPEC_CORES cores is $MAX_LOAD%"
+  m_warn "Setting $MAX_LOAD as the new load value"
+  LOAD=$MAX_LOAD
+fi
+
+CORES_TO_LOAD=""
+RES_LOAD=$LOAD
+NUM_CORES=1
+
+while [[ $RES_LOAD -gt 100 ]]; do
 
   CORE=$(echo $CORES_LIST | cut -d',' -f$NUM_CORES)
 
@@ -15,7 +25,7 @@ while [[ $LAST_LOAD -ge 100 ]]; do
       CORES_TO_LOAD="$CORE"
     fi
   fi
-  LAST_LOAD=$((LAST_LOAD-100))
+  RES_LOAD=$((RES_LOAD-100))
   NUM_CORES=$(($NUM_CORES + 1))
 done
 
@@ -27,9 +37,8 @@ else
 fi
 
 m_echo "Load will be distributed among $NUM_CORES cores [$CORES_TO_LOAD]"
-m_echo "Last core load: $LAST_LOAD"
+m_echo "Last core load: $RES_LOAD"
 
-export i=0
 # Run CPU load using stress-ng I times
 for ((i=0; i<$ITERATIONS; i++)); do
 
@@ -39,9 +48,9 @@ for ((i=0; i<$ITERATIONS; i++)); do
     CORE=$(echo $CORES_TO_LOAD | cut -d',' -f$(($j+1)))
 
     if [[ "$j" -eq "(($NUM_CORES - 1))" ]]; then
-      run_test $CORE $LAST_LOAD &
+      run_test $CORE $RES_LOAD $((i+1)) &
     else
-      run_test $CORE 100 &
+      run_test $CORE 100 $((i+1)) &
     fi
 
   done
