@@ -59,7 +59,7 @@ It will load core 0 with 70% of load using double tests for 10 seconds. It will 
 ### Example 2
 
 ```shell
-run.sh -I 3 --load 140 --timeout 1m --load-type all --cores-list 0,2,4
+run.sh -i 3 --load 140 --timeout 1m --load-type all --cores-list 0,2,4
 ```
 
 It will load core 0 with 100% of load and core 2 with 40% of load using all tests for 1 minute 3 times. It will ignore core 4 as there is not enough load for it.
