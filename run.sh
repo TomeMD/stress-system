@@ -8,6 +8,7 @@ export EXP_DIR=${STRESS_HOME}/experiment
 export OUT_DIR=${STRESS_HOME}/out/report_$(date '+%d_%m_%Y_%H-%M-%S')
 mkdir -p $OUT_DIR
 export LOG_FILE=${OUT_DIR}/log
+export CORE_FILE=${OUT_DIR}/core
 
 # Load bash functions
 . ${BIN_DIR}/functions.sh

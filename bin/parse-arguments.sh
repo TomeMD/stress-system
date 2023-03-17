@@ -56,8 +56,5 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Get number of cores in cores list
-export CORES_NUM=$(echo ${CORES_LIST} | awk -F ',' '{print NF}')
-
 # Print values
 print_conf

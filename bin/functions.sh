@@ -33,9 +33,8 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
-    m_echo "Iteration $(expr $i + 1): Stressing $CORES_NUM CPU cores"
-    taskset -c $CORES_LIST stress-ng --metrics --cpu $CORES_NUM --cpu-load $LOAD --cpu-method $LOAD_TYPE --timeout $TIMEOUT >> $LOG_FILE 2>&1
-    m_echo "Iteration $(expr $i + 1): Stress tests finished successfully"
+    m_echo "Iteration $(($i + 1)): Stressing CPU core $1 with $2% of load"
+    stress-ng --metrics --taskset $1 --cpu 1 --cpu-load $2 --cpu-method $LOAD_TYPE --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
 }
 
 export -f run_test
