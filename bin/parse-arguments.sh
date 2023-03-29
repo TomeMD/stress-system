@@ -16,6 +16,7 @@ Options:
   				y = years
   --load-type <type>     Type of load to stress the CPU (double, float, bitops, ...) [Default: all]
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
+  -o, --output <dir>     Directory to store log files. It must be an existing directory.      
   -h, --help             Show this help and exit
 
 Example of use:
@@ -45,6 +46,18 @@ while [[ $# -gt 0 ]]; do
       ;;
     -c|--cores-list)
       CORES_LIST="$2"
+      shift 2
+      ;;
+    -o|--output)
+      if [ -d "$2" ];
+      then
+        OUT_DIR="$2"
+        LOG_FILE=${OUT_DIR}/log
+        CORE_FILE=${OUT_DIR}/core
+      else
+        m_warn "Ignoring non-existent directory: $2"
+        m_warn "Using default output directory: $OUT_DIR"
+      fi
       shift 2
       ;;
     -h|--help)
