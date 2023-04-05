@@ -2,7 +2,7 @@
 
 function usage {
   cat << EOF
-Usage: $(basename "$0") [-i|--iterations <I>] [-l|--load <P>] [-t|--timeout <T>] [--load-type <type>] [-c|--cores-list [...]]
+Usage: $(basename "$0") [OPTIONS]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
@@ -16,7 +16,7 @@ Options:
   				y = years
   --load-type <type>     Type of load to stress the CPU (double, float, bitops, ...) [Default: all]
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
-  -o, --output <dir>     Directory to store log files. It must be an existing directory.      
+  -o, --output <dir>     Directory to store log files. [Default: ./out]      
   -h, --help             Show this help and exit
 
 Example of use:
@@ -49,13 +49,14 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     -o|--output)
+      mkdir -p $2
       if [ -d "$2" ];
       then
         OUT_DIR="$2"
         LOG_FILE=${OUT_DIR}/log
         CORE_FILE=${OUT_DIR}/core
       else
-        m_warn "Ignoring non-existent directory: $2"
+        m_warn "Directory $2 could not be created."
         m_warn "Using default output directory: $OUT_DIR"
       fi
       shift 2

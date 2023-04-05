@@ -22,7 +22,7 @@ You can specify the options from the CLI or by modifying the `./experiment/stres
 
 ```shell
 # ./run.sh --help
-Usage: run.sh [-i|--iterations <I>] [-l|--load <P>] [-t|--timeout <T>] [--load-type <type>] [-c|--cores-list [...]]
+Usage: run.sh [OPTIONS]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
@@ -36,7 +36,7 @@ Options:
                                 y = years
   --load-type <type>     Type of load to stress the CPU (double, float, bitops, ...) [Default: all]
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
-  -o, --output <dir>     Directory to store log files. It must be an existing directory.
+  -o, --output <dir>     Directory to store log files. [Default: ./out]
   -h, --help             Show this help and exit
 
 Example of use:
