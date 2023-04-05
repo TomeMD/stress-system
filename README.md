@@ -2,8 +2,6 @@
 
 A tool to load and stress a system using `stress-ng`.
 
-[TOC]
-
 ## Running stress-system
 
 You can run this tool in the following three ways:
