@@ -2,16 +2,76 @@
 
 A tool to load and stress a system using `stress-ng`.
 
-
+[TOC]
 
 ## Running stress-system
 
-To run this tool all you need is to have `stress-ng` installed. To install `stress-ng` follow the instructions in its [official repository](https://github.com/ColinIanKing/stress-ng).
+You can run this tool in the following three ways:
+
+- [Local](#local)
+- [Using Docker containers](#docker)
+- [Using Apptainer containers](#apptainer)
+
+<a name="local"></a>
+
+### Local
+
+To run this tool on your physical machine all you need is to have `stress-ng` installed. To install `stress-ng` follow the instructions in its [official repository](https://github.com/ColinIanKing/stress-ng).
 
 Once `stress-ng` is installed run the tool with:
 
 ```shell
 ./run.sh
+```
+
+<a name="docker"></a>
+
+### Using Docker containers
+
+First, you need to build the docker image:
+
+```dockerfile
+docker build -t stress-system -f container/Dockerfile .
+```
+
+Then you can run the tool:
+
+```dockerfile
+docker run -ti [-v <host-dir>:<container-dir>] stress-system [-o <container-dir> <other-options>]
+```
+
+To store the logs on your physical machine you have to mount a volume from host to container and specify the container directory as the output parameter of the tool (-o option). Here is an example in which the logs are stored in the `/tmp` directory of the container, which we can access through the `./out` directory from our machine:
+
+```dockerfile
+docker run -ti -v $(pwd)/out:/tmp stress-system -o /tmp -l 100 -c 0,6,7 
+```
+
+To run the container in background:
+
+```dockerfile
+docker run -d [-v <host-dir>:<container-dir>] stress-system [-o <container-dir> <other-options>]
+```
+
+<a name="apptainer"></a>
+
+### Using Apptainer containers
+
+First you need to build Apptainer image (SIF file):
+
+```shell
+cd container && apptainer build stress.sif stress.def && cd ..
+```
+
+Logs will be written to the `/tmp/out/report_$(date '+%d_%m_%Y_%H-%M-%M-%S')` directory, as Apptainer shares this directory with the host by default. Therefore, do not modify the tool's output directory. Now run the image in foreground:
+
+```shell
+apptainer run stress.sif [<options-except-output>]
+```
+
+Or in the background:
+
+```shell
+sudo apptainer instance start stress.sif [<options-except-output>]
 ```
 
 
@@ -45,70 +105,17 @@ Example of use:
 
 This tool assigns the load incrementally to each core, instead of distributing the load among all available cores. To better understand his behavior see the examples below.
 
-<style>
-  .progress-container {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .progress-bar {
-    width: 0%;
-    height: 30px;
-    background-color: #4caf50;
-    display: inline-block;
-  }
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-
-  td:nth-child(2) {
-    width: 200px;
-  }
-</style>
-
 ### Example 1
 
 ```shell
 run.sh --load 70 --timeout 10s --load-type double --cores-list 0,2,4
 ```
-<table>
-  <tr>
-    <th>Core</th>
-    <th><div align = "center">Load</div></th>
-  </tr>
-  <tr>
-    <td>0</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 70%;">
-          <div align = "center">70%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>
-      <div class="progress-container">
-        <div>
-          0%
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>
-      <div class="progress-container">
-        <div>
-          0%
-        </div>
-      </div>
-    </td>
-  </tr>
-</table>
+| Core | Load |
+| :--: | :--: |
+|  0   | 70%  |
+|  2   |  0%  |
+|  4   |  0%  |
+
 
 It will load core 0 with 70% of load using double tests for 10 seconds. It will ignore cores 2 and 4 as there is not enough load for them.
 
@@ -118,41 +125,12 @@ It will load core 0 with 70% of load using double tests for 10 seconds. It will 
 ```shell
 run.sh -i 3 --load 140 --timeout 1m --load-type all --cores-list 0,2,4
 ```
-<table>
-  <tr>
-    <th>Core</th>
-    <th><div align = "center">Load</div></th>
-  </tr>
-  <tr>
-    <td>0</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 40%;">
-          <div align = "center">40%</div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>
-      <div class="progress-container">
-        <div>
-          0%
-        </div>
-      </div>
-    </td>
-  </tr>
-</table>
+| Core | Load |
+| :--: | :--: |
+|  0   | 100% |
+|  2   | 40%  |
+|  4   |  0%  |
+
 
 It will load core 0 with 100% of load and core 2 with 40% of load using all tests for 1 minute 3 times. It will ignore core 4 as there is not enough load for it.
 
@@ -162,42 +140,12 @@ It will load core 0 with 100% of load and core 2 with 40% of load using all test
 ```shell
 run.sh --load 240 --timeout 1m --load-type all --cores-list 0,2,4
 ```
-<table>
-  <tr>
-    <th>Core</th>
-    <th><div align = "center">Load</div></th>
-  </tr>
-  <tr>
-    <td>0</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 40%;">
-          <div align = "center">40%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-</table>
+| Core | Load |
+| :--: | :--: |
+|  0   | 100% |
+|  2   | 100% |
+|  4   | 40%  |
+
 
 It will load core 0 and 2 with 100% of load and core 4 with 40% of load using all tests for 1 minute.
 
@@ -207,41 +155,11 @@ It will load core 0 and 2 with 100% of load and core 4 with 40% of load using al
 ```shell
 run.sh --load 340 --timeout 1m --load-type all --cores-list 0,2,4
 ```
-<table>
-  <tr>
-    <th>Core</th>
-    <th><div align = "center">Load</div></th>
-  </tr>
-  <tr>
-    <td>0</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>
-      <div class="progress-container">
-        <div class="progress-bar" style="width: 100%;">
-          <div align = "center">100%</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-</table>
+| Core | Load |
+| :--: | :--: |
+|  0   | 100% |
+|  2   | 100% |
+|  4   | 100% |
+
 
 It will load core 0, 2 and 4 with 100% of load using all tests for 1 minute. Although specified load is 340%, the maximum load that can be executed with 3 cores is 300%, so the load value is reassigned to its maximum possible value (300%).
