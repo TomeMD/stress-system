@@ -65,6 +65,8 @@ for ((i=0; i<$ITERATIONS; i++)); do
     m_err "Some test didn't finished successfully (STATUS = $STATUS)"
   fi
   # Wait specified time between iterations
-  sleep $TIME_BTW_ITERS
-
+  if [[ $i -ne $((ITERATIONS - 1)) ]]; then
+    m_echo "Waiting $TIME_BTW_ITERS seconds between iterations"
+    sleep $TIME_BTW_ITERS
+  fi
 done

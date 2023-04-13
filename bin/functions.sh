@@ -37,6 +37,7 @@ function print_conf() {
     m_echo "Load Type = $LOAD_TYPE"
     m_echo "Cores list = [$CORES_LIST]"
     m_echo "Iterations = $ITERATIONS"
+    m_echo "Time between iterations = ${TIME_BTW_ITERS}s"
 }
 
 export -f print_conf
