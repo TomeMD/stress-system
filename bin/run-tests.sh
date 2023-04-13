@@ -64,5 +64,7 @@ for ((i=0; i<$ITERATIONS; i++)); do
     m_err "Iteration $(($i + 1)): Stress tests went wrong"
     m_err "Some test didn't finished successfully (STATUS = $STATUS)"
   fi
+  # Wait specified time between iterations
+  sleep $TIME_BTW_ITERS
 
 done

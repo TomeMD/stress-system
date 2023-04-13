@@ -63,13 +63,13 @@ cd container && apptainer build stress.sif stress.def && cd ..
 Logs will be written to the `/tmp/out/report_$(date '+%d_%m_%Y_%H-%M-%M-%S')` directory, as Apptainer shares this directory with the host by default. Therefore, do not modify the tool's output directory. Now run the image in foreground:
 
 ```shell
-apptainer run stress.sif [<options-except-output>]
+apptainer run container/stress.sif [<options-except-output>]
 ```
 
 Or in the background:
 
 ```shell
-sudo apptainer instance start stress.sif [<options-except-output>]
+sudo apptainer instance start container/stress.sif [<options-except-output>]
 ```
 
 
@@ -84,6 +84,7 @@ Usage: run.sh [OPTIONS]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
+  -b, --time-btw-iters <T>    Wait T seconds between iterations [Default: 10s]
   -l, --load <P>          Stress CPU with P percent of CPU load. The load will be assigned to cores incrementally. [Default: 50%]
                                 Example: "run.sh -l 130 -c 3,6" will load core 3 at 100% and core 6 at 30%.
   -t, --timeout <T>       Stop tests after T seconds. Time units can be specified by using suffixes. [Default: 10s]

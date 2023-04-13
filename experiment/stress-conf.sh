@@ -6,6 +6,9 @@
 # The number of test executions
 #export ITERATIONS=1
 
+# Time between iterations in seconds
+#export TIME_BTW_ITERS=10
+
 # Percentage of CPU load
 #export LOAD=50
 

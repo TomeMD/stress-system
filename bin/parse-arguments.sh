@@ -6,6 +6,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
+  -b, --time-btw-iters <T>    Wait T seconds between iterations [Default: 10s]
   -l, --load <P>          Stress CPU with P percent of CPU load. The load will be assigned to cores incrementally. [Default: 50%]
                                 Example: "run.sh -l 130 -c 3,6" will load core 3 at 100% and core 6 at 30%.
   -t, --timeout <T>       Stop tests after T seconds. Time units can be specified by using suffixes. [Default: 10s]
@@ -30,6 +31,10 @@ while [[ $# -gt 0 ]]; do
   case $1 in
     -i|--iterations)
       ITERATIONS="$2"
+      shift 2
+      ;;
+    -b|--time-btw-iters)
+      TIME_BTW_ITERS="$2"
       shift 2
       ;;
     -l|--load)
