@@ -15,18 +15,18 @@ Options:
   				h = hours
   				d = days
   				y = years
-  --load-type <type>     Type of load to stress the CPU (double, float, bitops, ...) [Default: all]
+  --load-types []        Comma-separated list of load to stress the CPU [Default: all]. 
+                         WARNING: When several load types are used at the same time, CPU load may not reach the expected value.
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
   -o, --output <dir>     Directory to store log files. [Default: ./out]      
   -h, --help             Show this help and exit
 
 Example of use:
-  $(basename "$0") --load 70 --timeout 10s --load-type double --cores-list 0,2,4
+  $(basename "$0") --load 70 --timeout 10s --load-types double --cores-list 0,2,4
 EOF
 exit 1
 }
 
-# Procesamiento de los argumentos utilizando getopts
 while [[ $# -gt 0 ]]; do
   case $1 in
     -i|--iterations)
@@ -45,8 +45,8 @@ while [[ $# -gt 0 ]]; do
       TIMEOUT="$2"
       shift 2
       ;;
-    --load-type)
-      LOAD_TYPE="$2"
+    --load-types)
+      LOAD_TYPES="$2"
       shift 2
       ;;
     -c|--cores-list)

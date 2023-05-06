@@ -84,7 +84,7 @@ Usage: run.sh [OPTIONS]
 
 Options:
   -i, --iterations <I>    Run tests I times. [Default: 1]
-  -b, --time-btw-iters <T>    Wait T seconds between iterations [Default: 10s]
+  -b, --time-btw-iters <T>    Wait T seconds between iterations. [Default: 10s]
   -l, --load <P>          Stress CPU with P percent of CPU load. The load will be assigned to cores incrementally. [Default: 50%]
                                 Example: "run.sh -l 130 -c 3,6" will load core 3 at 100% and core 6 at 30%.
   -t, --timeout <T>       Stop tests after T seconds. Time units can be specified by using suffixes. [Default: 10s]
@@ -93,13 +93,14 @@ Options:
                                 h = hours
                                 d = days
                                 y = years
-  --load-type <type>     Type of load to stress the CPU (double, float, bitops, ...) [Default: all]
+  --load-type <type>      Comma-separated list of types of load to stress the CPU. [Default: all]
+  						  WARNING: When several load types are used at the same time, CPU load may not reach the expected value.
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
   -o, --output <dir>     Directory to store log files. [Default: ./out]
   -h, --help             Show this help and exit
 
 Example of use:
-  run.sh --load 70 --timeout 10s --load-type double --cores-list 0,2,4
+  run.sh --load 230 --timeout 10s --load-types double --cores-list 0,2,4
 ```
 
 This tool assigns the load incrementally to each core, instead of distributing the load among all available cores. To better understand his behavior see the examples below.
@@ -107,7 +108,7 @@ This tool assigns the load incrementally to each core, instead of distributing t
 ### Example 1
 
 ```shell
-run.sh --load 70 --timeout 10s --load-type double --cores-list 0,2,4
+run.sh --load 70 --timeout 10s --load-types double --cores-list 0,2,4
 ```
 | Core | Load |
 | :--: | :--: |
@@ -122,7 +123,7 @@ It will load core 0 with 70% of load using double tests for 10 seconds. It will 
 ### Example 2
 
 ```shell
-run.sh -i 3 --load 140 --timeout 1m --load-type all --cores-list 0,2,4
+run.sh -i 3 --load 140 --timeout 1m --load-types all --cores-list 0,2,4
 ```
 | Core | Load |
 | :--: | :--: |
@@ -137,7 +138,7 @@ It will load core 0 with 100% of load and core 2 with 40% of load using all test
 ### Example 3
 
 ```shell
-run.sh --load 240 --timeout 1m --load-type all --cores-list 0,2,4
+run.sh --load 240 --timeout 1m --load-types all --cores-list 0,2,4
 ```
 | Core | Load |
 | :--: | :--: |
@@ -152,7 +153,7 @@ It will load core 0 and 2 with 100% of load and core 4 with 40% of load using al
 ### Example 4
 
 ```shell
-run.sh --load 340 --timeout 1m --load-type all --cores-list 0,2,4
+run.sh --load 340 --timeout 1m --load-types all --cores-list 0,2,4
 ```
 | Core | Load |
 | :--: | :--: |

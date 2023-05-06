@@ -34,7 +34,7 @@ function print_conf() {
     m_echo "Writing output to $LOG_FILE"
     m_echo "CPU load = $LOAD%"
     m_echo "Timeout = $TIMEOUT"
-    m_echo "Load Type = $LOAD_TYPE"
+    m_echo "Load Types = [$LOAD_TYPES]"
     m_echo "Cores list = [$CORES_LIST]"
     m_echo "Iterations = $ITERATIONS"
     m_echo "Time between iterations = ${TIME_BTW_ITERS}s"
@@ -43,8 +43,10 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
-    m_echo "Iteration $3: Stressing CPU core $1 with $2% of load"
-    stress-ng --metrics --taskset $1 --cpu 1 --cpu-load $2 --cpu-method $LOAD_TYPE --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
+    local LOAD_PER_STRESSOR=$(($2 / $NUM_STRESSORS))
+    m_echo "Iteration $3: Stressing CPU core $1 using $NUM_STRESSORS stressor(s) with $LOAD_PER_STRESSOR% of load each"
+    echo "stress-ng --metrics --taskset $1 --cpu-load $LOAD_PER_STRESSOR $STRESSORS --timeout $TIMEOUT"
+    stress-ng --metrics --taskset $1 --cpu-load $LOAD_PER_STRESSOR $STRESSORS --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
 }
 
 export -f run_test
