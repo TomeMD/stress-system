@@ -43,10 +43,8 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
-    local LOAD_PER_STRESSOR=$(($2 / $NUM_STRESSORS))
-    m_echo "Iteration $3: Stressing CPU core $1 using $NUM_STRESSORS stressor(s) with $LOAD_PER_STRESSOR% of load each"
-    echo "stress-ng --metrics --taskset $1 --cpu-load $LOAD_PER_STRESSOR $STRESSORS --timeout $TIMEOUT"
-    stress-ng --metrics --taskset $1 --cpu-load $LOAD_PER_STRESSOR $STRESSORS --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
+    m_echo "Iteration $3: Stressing CPU core $1 with $2% of load"
+    stress-ng --metrics --taskset $1 --cpu-load $2 --cpu 1 $METHODS--timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
 }
 
 export -f run_test
