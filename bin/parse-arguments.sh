@@ -16,13 +16,12 @@ Options:
   				d = days
   				y = years
   --load-types []        Comma-separated list of types of load to stress the CPU. [Default: all]
-                         WARNING: When several load types are used at the same time, CPU load may not reach the expected value.
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
   -o, --output <dir>     Directory to store log files. [Default: ./out]      
   -h, --help             Show this help and exit
 
 Example of use:
-  $(basename "$0") --load 230 --timeout 10s --load-types double --cores-list 0,2,4
+  $(basename "$0") --load 230 --timeout 10s --load-types double,int64 --cores-list 0,2,4
 EOF
 exit 1
 }

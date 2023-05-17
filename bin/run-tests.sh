@@ -12,12 +12,6 @@ if [[ $LOAD -gt $MAX_LOAD ]]; then
 fi
 
 IFS=',' read -ra LOAD_TYPES_ARRAY <<< "${LOAD_TYPES}"
-# NUM_STRESSORS=${#LOAD_TYPES_ARRAY[@]}
-# if [[ $NUM_STRESSORS -gt 1 ]]; then
-#   m_warn "Using several load types ($LOAD_TYPES)"
-#   m_warn "Using more than one load type will result in unexpected load values"
-#   m_warn "Specified load ($LOAD%) may not be reached"
-# fi
 
 CORES_TO_LOAD=""
 RES_LOAD=$LOAD

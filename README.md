@@ -72,8 +72,6 @@ Or in the background:
 sudo apptainer instance start container/stress.sif [<options-except-output>]
 ```
 
-
-
 ## Options
 
 You can specify the options from the CLI or by modifying the `./experiment/stress-conf.sh` configuration file. 
@@ -93,14 +91,13 @@ Options:
                                 h = hours
                                 d = days
                                 y = years
-  --load-type <type>      Comma-separated list of types of load to stress the CPU. [Default: all]
-  						  WARNING: When several load types are used at the same time, CPU load may not reach the expected value.
+  --load-types []        Comma-separated list of types of load to stress the CPU. [Default: all]
   -c, --cores-list []    Comma-separated list of cores on which you want to run the tests [Default: all]
   -o, --output <dir>     Directory to store log files. [Default: ./out]
   -h, --help             Show this help and exit
 
 Example of use:
-  run.sh --load 230 --timeout 10s --load-types double --cores-list 0,2,4
+  run.sh --load 230 --timeout 10s --load-types double,int64 --cores-list 0,2,4
 ```
 
 This tool assigns the load incrementally to each core, instead of distributing the load among all available cores. To better understand his behavior see the examples below.
