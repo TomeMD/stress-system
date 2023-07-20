@@ -9,6 +9,9 @@ export ITERATIONS=1
 # Time between iterations in seconds
 export TIME_BTW_ITERS=10
 
+# Comma-separated list of stressors to run on system
+export STRESSORS=cpu
+
 # Percentage of CPU load
 export LOAD=50
 

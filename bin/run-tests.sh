@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export METHODS=""
 export USER_SPEC_CORES=$(echo ${CORES_LIST} | awk -F ',' '{print NF}')
 export MAX_LOAD=$(($USER_SPEC_CORES * 100))
 
@@ -12,6 +11,7 @@ if [[ $LOAD -gt $MAX_LOAD ]]; then
 fi
 
 IFS=',' read -ra LOAD_TYPES_ARRAY <<< "${LOAD_TYPES}"
+IFS=',' read -ra STRESSORS_ARRAY <<< "${STRESSORS}"
 
 CORES_TO_LOAD=""
 RES_LOAD=$LOAD
@@ -34,10 +34,18 @@ done
 RES_LOAD=$(($RES_LOAD + 100))
 m_echo "Load will be distributed among $NUM_CORES cores [$CORES_TO_LOAD]"
 
-# Build one stressor per load type (cpu method)
-for METHOD in "${LOAD_TYPES_ARRAY[@]}"; do
-  METHODS+="--cpu-method ${METHOD} "
+
+STRESSORS=""
+for STRESSOR in "${STRESSORS_ARRAY[@]}"; do
+  STRESSORS+="--${STRESSOR} 1 "
+  if [ "$STRESSOR" == "cpu" ]; then
+    # Build one cpu method per load type
+    for CPU_METHOD in "${LOAD_TYPES_ARRAY[@]}"; do
+      STRESSORS+="--cpu-method ${CPU_METHOD} "
+    done
+  fi
 done
+STRESSORS=$(echo "${STRESSORS}" | sed 's/ *$//')
 
 # Run CPU load using stress-ng I times
 for ((i=0; i<$ITERATIONS; i++)); do
