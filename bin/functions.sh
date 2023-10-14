@@ -37,6 +37,7 @@ function print_conf() {
     m_echo "CPU Load = $LOAD%"
     m_echo "CPU Load Types = [$LOAD_TYPES]"
     m_echo "Cores list = [$CORES_LIST]"
+    m_echo "Other stress-ng options = [${OTHER_OPTIONS}]"
     m_echo "Iterations = $ITERATIONS"
     m_echo "Time between iterations = ${TIME_BTW_ITERS}s"
 }
@@ -44,8 +45,8 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
-    m_echo "Iteration $3: Stressing CPU core $1 with $2% of load"
-    stress-ng --metrics --taskset $1 --cpu-load $2 $STRESSORS --timeout $TIMEOUT >> ${CORE_FILE}_$1 2>&1
+    m_echo "Iteration ${3}: Stressing CPU core ${1} with ${2}% of load"
+    stress-ng --metrics --taskset "${1}${OTHER_OPTIONS}" --cpu-load "${2}" "${STRESSORS}" --timeout "${TIMEOUT}" >> "${CORE_FILE}_${1}" 2>&1
 }
 
 export -f run_test

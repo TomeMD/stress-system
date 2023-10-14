@@ -12,6 +12,7 @@ fi
 
 IFS=',' read -ra LOAD_TYPES_ARRAY <<< "${LOAD_TYPES}"
 IFS=',' read -ra STRESSORS_ARRAY <<< "${STRESSORS}"
+IFS=',' read -ra OTHER_OPTIONS_ARRAY <<< "${OTHER_OPTIONS}"
 
 CORES_TO_LOAD=""
 RES_LOAD=$LOAD
@@ -45,7 +46,18 @@ for STRESSOR in "${STRESSORS_ARRAY[@]}"; do
     done
   fi
 done
-STRESSORS=$(echo "${STRESSORS}" | sed 's/ *$//')
+STRESSORS=$(echo "${STRESSORS}" | sed 's/ *$//') # Remove final blank spaces
+
+OTHER_OPTIONS=" "
+for OPTION in "${OTHER_OPTIONS_ARRAY[@]}"; do
+  IFS="=" read -r KEY VALUE <<< "${OPTION}"
+  if [ "${VALUE}" != "None" ]; then
+    OTHER_OPTIONS+="--${KEY} ${VALUE} "
+  else
+    OTHER_OPTIONS+="--${KEY} "
+  fi
+done
+OTHER_OPTIONS=$(echo "${OTHER_OPTIONS}" | sed 's/ *$//') # Remove final blank spaces
 
 # Run CPU load using stress-ng I times
 for ((i=0; i<$ITERATIONS; i++)); do
