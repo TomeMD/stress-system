@@ -18,3 +18,4 @@ From: debian:bullseye-slim
   OUT_DIR=/tmp/out
   mkdir -p $OUT_DIR
   cd /tmp
+  /usr/local/bin/stress-system/run.sh "$@" -o $OUT_DIR
