@@ -45,9 +45,11 @@ function print_conf() {
 export -f print_conf
 
 function run_test() {
+    local OUT_FILE="${OUT_DIR}/core_${1}"
+    touch "${OUT_FILE}" && chmod 777 "${OUT_FILE}"
     m_echo "Iteration ${3}: Stressing CPU core ${1} with ${2}% of load"
-    echo "stress-ng --metrics --taskset ${1}${OTHER_OPTIONS} --cpu-load ${2} ${STRESSORS} --timeout ${TIMEOUT} >> ${CORE_FILE}_${1} 2>&1"
-    taskset -c ${1} stress-ng --metrics${OTHER_OPTIONS} --cpu-load ${2} ${STRESSORS} --timeout ${TIMEOUT} >> "${CORE_FILE}_${1}" 2>&1
+    m_echo "stress-ng --metrics --taskset ${1}${OTHER_OPTIONS} --cpu-load ${2} ${STRESSORS} --timeout ${TIMEOUT} >> ${OUT_FILE} 2>&1"
+    taskset -c ${1} stress-ng --metrics${OTHER_OPTIONS} --cpu-load ${2} ${STRESSORS} --timeout ${TIMEOUT} >> "${OUT_FILE}" 2>&1
 }
 
 export -f run_test

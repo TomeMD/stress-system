@@ -65,18 +65,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     -o|--output)
-      DEFAULT_DIR=$OUT_DIR
-      OUT_DIR="$2/report_$(date '+%d_%m_%Y_%H-%M-%S')"
-      mkdir -p $OUT_DIR
-      if [ -d $OUT_DIR ];
-      then
-        LOG_FILE=${OUT_DIR}/log
-        CORE_FILE=${OUT_DIR}/core
-      else
-        m_warn "Directory $OUT_DIR could not be created."
-        m_warn "Using default output directory: $DEFAULT_DIR"
-        OUT_DIR=$DEFAULT_DIR
-      fi
+      OUT_DIR="${2}/report_$(date '+%d_%m_%Y_%H-%M-%S')"
       shift 2
       ;;
     -h|--help)
@@ -88,6 +77,3 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
-
-# Print values
-print_conf

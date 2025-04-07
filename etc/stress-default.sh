@@ -26,3 +26,6 @@ export OTHER_OPTIONS=""
 
 # Comma-separated list of cores on which you want to run the tests 
 export CORES_LIST=$(seq -s ',' 0 $(($(nproc) - 1)))
+
+# Output directory
+export OUT_DIR="${STRESS_HOME}/out/report_$(date '+%d_%m_%Y_%H-%M-%S')"

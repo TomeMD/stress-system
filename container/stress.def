@@ -9,13 +9,7 @@ From: debian:bullseye-slim
   chmod +x /usr/local/bin/stress-system/run.sh
 
 %runscript
-  OUT_DIR=/tmp/out
-  mkdir -p $OUT_DIR
-  cd /tmp
-  /usr/local/bin/stress-system/run.sh "$@" -o $OUT_DIR
+  /usr/local/bin/stress-system/run.sh "$@"
 
 %startscript
-  OUT_DIR=/tmp/out
-  mkdir -p $OUT_DIR
-  cd /tmp
-  /usr/local/bin/stress-system/run.sh "$@" -o $OUT_DIR
+  /usr/local/bin/stress-system/run.sh "$@"

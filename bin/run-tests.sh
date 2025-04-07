@@ -1,9 +1,20 @@
 #!/bin/bash
 
+export LOG_FILE="${OUT_DIR}/log"
 export USER_SPEC_CORES=$(echo ${CORES_LIST} | awk -F ',' '{print NF}')
 export MAX_LOAD=$(($USER_SPEC_CORES * 100))
 
-if [[ $LOAD -gt $MAX_LOAD ]]; then
+# Create output directory
+mkdir -p "${OUT_DIR}" && touch "${LOG_FILE}"
+
+# Ensure output directory and files are accessible to every user
+chmod 777 "${OUT_DIR}" && chmod 777 "${LOG_FILE}"
+
+# Print current configuration
+print_conf
+
+# Check the specified load does not surpass the maximum load for the current cores list
+if [[ ${LOAD} -gt ${MAX_LOAD} ]]; then
   m_warn "Too high load specified for the available cores"
   m_warn "Maximum load that can be executed with $USER_SPEC_CORES cores is $MAX_LOAD%"
   m_warn "Setting $MAX_LOAD as the new load value"
