@@ -33,35 +33,35 @@ exit 1
 while [[ $# -gt 0 ]]; do
   case $1 in
     -i|--iterations)
-      ITERATIONS="$2"
+      ITERATIONS="${2}"
       shift 2
       ;;
     -b|--time-btw-iters)
-      TIME_BTW_ITERS="$2"
+      TIME_BTW_ITERS="${2}"
       shift 2
       ;;
     -l|--cpu-load)
-      LOAD="$2"
+      LOAD="${2}"
       shift 2
       ;;
     -s|--stressors)
-      STRESSORS="$2"
+      STRESSORS="${2}"
       shift 2
       ;;
     -t|--timeout)
-      TIMEOUT="$2"
+      TIMEOUT="${2}"
       shift 2
       ;;
     --cpu-load-types)
-      LOAD_TYPES="$2"
+      LOAD_TYPES="${2}"
       shift 2
       ;;
     --other)
-      OTHER_OPTIONS="$2"
+      OTHER_OPTIONS="${2}"
       shift 2
       ;;
     -c|--cores-list)
-      CORES_LIST="$2"
+      CORES_LIST="${2}"
       shift 2
       ;;
     -o|--output)
@@ -72,7 +72,7 @@ while [[ $# -gt 0 ]]; do
       usage
       ;;
     *)
-	  echo "Unknown option: $1"
+	  echo "Unknown option: ${1}"
       usage
       ;;
   esac
